@@ -9,6 +9,8 @@ export const Container = styled.main`
   width: 100%;
   height: 100%;
   background-image: url("/waves.png");
+  background-position: 50% 50%;
+  background-size: cover;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
