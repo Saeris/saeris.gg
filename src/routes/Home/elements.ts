@@ -58,6 +58,7 @@ export const Avatar = styled.img`
   border-radius: 50%;
   object-fit: cover;
   object-position: center center;
+  box-shadow: 0rem 0.6rem 1.2rem 0.2rem hsl(0deg 0% 2% / 40%);
 `;
 
 export const About = styled.figcaption`
