@@ -1,0 +1,51 @@
+{
+  "name": "saeris.gg",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "repository": "git@github.com:Saeris/saeris.gg.git",
+  "author": "Drake Costa <drake@saeris.io>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "ci": "yarn test --silent",
+    "lint": "yarn test:lint",
+    "format": "yarn test:lint --fix",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "prepare": "is-ci || husky install",
+    "test": "run-s test:*",
+    "test:lint": "eslint \"./src/**/*.{j,t}s?(x)\"",
+    "test:unit": "jest -c ./jest.config.js",
+    "test:typecheck": "tsc --noEmit",
+    "typecheck": "yarn test:typecheck"
+  },
+  "dependencies": {
+    "@adaptui/react": "^1.0.0-0",
+    "ariakit": "^2.0.0-next.32",
+    "next": "^12.2.2",
+    "next-pwa": "^5.5.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "react-is": "^18.2.0",
+    "react-query": "^3.39.1",
+    "styled-components": "^5.3.5",
+    "twitter-api-sdk": "^1.0.9",
+    "zod": "^3.17.3"
+  },
+  "devDependencies": {
+    "@saeris/eslint-config": "^2.2.0",
+    "@types/eslint": "^8.4.5",
+    "@types/jest": "^28.1.4",
+    "@types/node": "18.0.3",
+    "@types/react": "18.0.15",
+    "@types/react-dom": "18.0.6",
+    "@types/styled-components": "5.1.25",
+    "eslint": "^8.19.0",
+    "jest": "^28.1.2",
+    "prettier": "^2.7.1",
+    "typescript": "4.7.4"
+  },
+  "packageManager": "yarn@3.2.1"
+}
