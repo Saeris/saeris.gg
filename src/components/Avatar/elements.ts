@@ -17,7 +17,6 @@ export const Container = styled.div`
 `;
 
 export const Placeholder = styled.div`
-  z-index: 2;
   position: absolute;
   display: block;
   max-width: 100%;
