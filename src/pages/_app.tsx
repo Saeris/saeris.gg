@@ -18,6 +18,7 @@ const meta = {
   favicon: `/favicon.ico`,
   image: `/share-card.webp`,
   manifest: `/manifest.json`,
+  webmanifest: `/site.webmanifest`,
   color: `#127cbb`
 };
 
@@ -27,6 +28,7 @@ const _app: React.FC<AppProps> = ({ Component, pageProps }) => (
       <title>{meta.title}</title>
       <link rel="shortcut icon" href={meta.favicon} />
       <link rel="manifest" href={meta.manifest} />
+      <link rel="manifest" href={meta.webmanifest} />
       <meta name="theme-color" content={meta.color} />
       <meta name="description" content={meta.description} />
       <meta name="image" content={meta.image} />

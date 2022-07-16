@@ -2,15 +2,14 @@ import styled from "styled-components";
 import { Link } from "../../components/Link";
 
 export const Container = styled.main`
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
   width: 100%;
   height: 100%;
-  background-image: url("/waves.png");
-  background-position: 50% 50%;
-  background-size: cover;
+  backdrop-filter: brightness(0.7);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
@@ -51,16 +50,6 @@ export const Profile = styled.figure`
   padding-bottom: 3.2rem;
 `;
 
-export const Avatar = styled.img`
-  position: relative;
-  width: 12.8rem;
-  height: 12.8rem;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center center;
-  box-shadow: 0rem 0.6rem 1.2rem 0.2rem hsl(0deg 0% 2% / 40%);
-`;
-
 export const About = styled.figcaption`
   display: flex;
   flex-direction: column;
@@ -68,6 +57,7 @@ export const About = styled.figcaption`
   gap: 0.4rem;
   width: 100%;
   height: fit-content;
+  mix-blend-mode: luminosity;
 `;
 
 export const Name = styled.h1`
@@ -102,7 +92,7 @@ export const SocialLink = styled(Link)`
   width: 100%;
   padding-inline: 2.4rem;
   padding-block: 0.8rem;
-  border: 0.1rem solid hsla(0, 0%, 100%, 0.15);
+  border: 0.1rem solid hsla(0, 0%, 100%, 0.25);
   border-radius: 0.8rem;
   background-blend-mode: luminosity;
   color: hsla(225, 6%, 96%, 0.9);
@@ -122,7 +112,7 @@ export const SocialLink = styled(Link)`
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: hsla(0, 0%, 90%, 0.05);
+    background-color: hsla(0, 0%, 90%, 0.15);
     backdrop-filter: blur(5px);
   }
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "short_name": "Saeris.io",
-  "name": "Drake Costa - Resume 2020",
+  "short_name": "saeris.gg",
+  "name": "saeris.gg",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
