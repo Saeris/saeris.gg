@@ -18,8 +18,7 @@ const meta = {
   favicon: `/favicon.ico`,
   image: `/share-card.webp`,
   manifest: `/manifest.json`,
-  webmanifest: `/site.webmanifest`,
-  color: `#127cbb`
+  webmanifest: `/site.webmanifest`
 };
 
 const _app: React.FC<AppProps> = ({ Component, pageProps }) => (
@@ -29,7 +28,6 @@ const _app: React.FC<AppProps> = ({ Component, pageProps }) => (
       <link rel="shortcut icon" href={meta.favicon} />
       <link rel="manifest" href={meta.manifest} />
       <link rel="manifest" href={meta.webmanifest} />
-      <meta name="theme-color" content={meta.color} />
       <meta name="description" content={meta.description} />
       <meta name="image" content={meta.image} />
       {/* OpenGraph */}
@@ -55,7 +53,6 @@ const _app: React.FC<AppProps> = ({ Component, pageProps }) => (
         sizes="192x192"
         href="/logo192.png"
       />
-      <meta name="apple-mobile-web-app-status-bar" content={meta.color} />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta
         name="apple-mobile-web-app-status-bar-style"

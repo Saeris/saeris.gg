@@ -17,6 +17,7 @@ export const Container = styled.div`
 `;
 
 export const Placeholder = styled.div`
+  z-index: 2;
   position: absolute;
   display: block;
   max-width: 100%;
@@ -29,6 +30,7 @@ export const Placeholder = styled.div`
 
 export const Img = styled(Image)<{ $visible: boolean }>(
   ({ $visible }) => css`
+    z-index: 3;
     position: absolute;
     display: block;
     max-width: 100%;
