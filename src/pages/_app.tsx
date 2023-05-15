@@ -1,75 +1,58 @@
 import React from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { ThemeProvider } from "styled-components";
-import { theme } from "../theme/theme";
-import { GlobalStyles } from "../theme/global";
+import { Analytics } from "@vercel/analytics/react";
+import { config } from "../config";
+import { Layout } from "../components/Layout";
+import "../styles/reset.css";
 
-const queryClient = new QueryClient();
-
-const meta = {
-  title: `Drake Costa - Developer Experience Engineer`,
-  description: `Profile`,
-  locale: `en_US`,
-  url: `https://saeris.gg`,
-  twitter: `@saeris`,
-  favicon: `/favicon.ico`,
-  image: `/share-card.webp`,
-  manifest: `/manifest.json`,
-  webmanifest: `/site.webmanifest`
-};
-
-const _app: React.FC<AppProps> = ({ Component, pageProps }) => (
+const _app: React.FC<AppProps> = ({ Component, pageProps, router }) => (
   <>
     <Head>
-      <title>{meta.title}</title>
-      <link rel="shortcut icon" href={meta.favicon} />
-      <link rel="manifest" href={meta.manifest} />
-      <link rel="manifest" href={meta.webmanifest} />
-      <meta name="description" content={meta.description} />
-      <meta name="image" content={meta.image} />
+      <title>{config.name}</title>
+      <link rel="icon" href="/icon.svg" />
+      <link rel="mask-icon" color="white" href="/icon.svg" />
+      <link rel="manifest" href="/manifest.webmanifest" />
+      <meta name="description" content={config.title} />
+      <meta name="image" content="/share-card.png" />
       {/* OpenGraph */}
-      <meta property="og:site_name" content={meta.title} />
-      <meta property="og:url" content={meta.url} />
+      <meta property="og:site_name" content={config.name} />
+      <meta property="og:url" content={process.env.NEXT_PUBLIC_VERCEL_URL} />
       <meta property="og:type" content="website" />
-      <meta property="og:title" content={meta.title} />
-      <meta property="og:description" content={meta.description} />
-      <meta property="og:locale" content={meta.locale} />
-      <meta property="og:image" content={meta.image} />
-      <meta property="og:image:alt" content={meta.description} />
+      <meta property="og:title" content={config.name} />
+      <meta property="og:description" content={config.title} />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:image" content="/share-card.png" />
+      <meta property="og:image:alt" content={config.title} />
       {/* Twitter */}
-      <meta name="twitter:title" content={meta.title} />
-      <meta name="twitter:description" content={meta.description} />
-      <meta name="twitter:creator" content={meta.twitter} />
+      <meta name="twitter:title" content={config.name} />
+      <meta name="twitter:description" content={config.title} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image" content={meta.image} />
-      <meta name="twitter:image:alt" content={meta.title} />
+      <meta name="twitter:image" content="/share-card.png" />
+      <meta name="twitter:image:alt" content={config.name} />
       {/* iOS */}
+      <link rel="apple-touch-icon" href="/app-icon-192.png" />
       <link
-        rel="apple-touch-icon"
-        type="image/png"
-        sizes="192x192"
-        href="/logo192.png"
+        rel="apple-touch-startup-image"
+        href="/splash-screen.png"
+        media="screen and (device-width: 320px) and (-webkit-device-pixel-ratio: 2)"
       />
+      <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta
         name="apple-mobile-web-app-status-bar-style"
-        content="white-translucent"
+        content="black-translucent"
       />
       <meta
         name="viewport"
-        content="viewport-fit=cover, width=device-width, initial-scale=1"
+        content="viewport-fit=cover, width=device-width, height=device-height, initial-scale=1, user-scalable=no"
       />
     </Head>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <Component {...pageProps} />
-      </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <Layout>
+      {/* @ts-expect-error */}
+      <Component key={router.route} {...pageProps} />
+    </Layout>
+    <Analytics />
   </>
 );
 

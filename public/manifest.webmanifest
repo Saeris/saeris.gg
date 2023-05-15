@@ -1,24 +1,24 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "short_name": "saeris.gg",
   "name": "saeris.gg",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#ffffff",
+  "theme_color": "#9bff5c",
+  "background_color": "#9bff5c",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/icon.svg",
+      "purpose": "maskable",
+      "sizes": "any"
     },
     {
-      "src": "logo192.png",
+      "src": "/app-icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "/app-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

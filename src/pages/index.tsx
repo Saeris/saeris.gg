@@ -1,24 +1,22 @@
-import type { GetStaticProps } from "next";
-import { Client } from "twitter-api-sdk";
-import { getPlaiceholder } from "plaiceholder";
-import type { StaticProps } from "../routes/Home";
-import { Home } from "../routes/Home";
+import React from "react";
+import type { NextPage } from "next";
+import { HiQrCode } from "react-icons/hi2";
+import { config } from "../config";
+import { Stack, Profile, Links, IconLink } from "../components";
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const client = new Client(process.env.TWITTER_API_TOKEN!);
-  const { data } = await client.users.findUserByUsername(`saeris`, {
-    "user.fields": [`profile_image_url`]
-  });
-  const url = data!.profile_image_url!.replace(`_normal`, ``);
-  const { css, img } = await getPlaiceholder(url);
-
-  return {
-    props: {
-      avatar: img,
-      placeholder: css
-    },
-    revalidate: 86400 // Revalidate every 24hrs
-  };
+const Home: NextPage = () => {
+  const { name, title, links } = config;
+  return (
+    <>
+      <Stack>
+        <Profile name={name} title={title} />
+        <Links links={links} />
+      </Stack>
+      <IconLink title="View QR Code" href="/qr">
+        <HiQrCode />
+      </IconLink>
+    </>
+  );
 };
 
 export default Home;
