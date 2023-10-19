@@ -2,7 +2,7 @@ import type { NextApiHandler } from "next";
 
 interface Data {
   game_count: number;
-  games: {
+  games: Array<{
     appid: number;
     name: string;
     playtime_2weeks?: number;
@@ -13,7 +13,7 @@ interface Data {
     playtime_mac_forever: number;
     playtime_linux_forever: number;
     has_community_visible_stats?: boolean;
-  }[];
+  }>;
 }
 
 const base = `http://api.steampowered.com/`;
@@ -23,7 +23,7 @@ const key = process.env.STEAM_API_KEY!;
 
 const setParams = (
   url: URL,
-  params: Record<string, string | number | boolean>
+  params: Record<string, boolean | number | string>
 ): void => {
   for (const [name, value] of Object.entries(params)) {
     if (typeof value !== `undefined`) {
