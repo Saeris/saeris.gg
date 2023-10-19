@@ -13,7 +13,7 @@ const variants = {
 };
 
 export interface LinksProps {
-  links: React.ComponentProps<typeof SocialLink>[];
+  readonly links: Array<React.ComponentProps<typeof SocialLink>>;
 }
 
 export const Links: React.FC<LinksProps> = ({ links }) => (

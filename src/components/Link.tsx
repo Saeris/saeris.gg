@@ -4,13 +4,12 @@ import { default as NextLink } from "next/link";
 
 export interface LinkProps {
   // eslint-disable-next-line quotes
-  to?: NextLinkProps["href"];
+  readonly to?: NextLinkProps["href"];
   // eslint-disable-next-line quotes
-  href?: NextLinkProps["href"];
-  external?: boolean;
-  onClick?: React.MouseEventHandler;
-  className?: string;
-  children?: React.ReactNode;
+  readonly href?: NextLinkProps["href"];
+  readonly external?: boolean;
+  readonly className?: string;
+  readonly children?: React.ReactNode;
 }
 
 const isExternal = /^(?:[a-z]+:)?\/\//i;
@@ -38,7 +37,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
       to,
       href,
       external = (to || href) && isExternal.test((to ?? href) as string),
-      onClick,
       children,
       className,
       ...props

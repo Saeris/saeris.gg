@@ -1,6 +1,7 @@
 import React from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+// eslint-disable-next-line import/no-unresolved
 import { Analytics } from "@vercel/analytics/react";
 import { config } from "../config";
 import { Layout } from "../components/Layout";
@@ -33,6 +34,7 @@ const _app: React.FC<AppProps> = ({ Component, pageProps, router }) => (
       {/* iOS */}
       <link rel="apple-touch-icon" href="/app-icon-192.png" />
       <link
+        // eslint-disable-next-line react/no-invalid-html-attribute
         rel="apple-touch-startup-image"
         href="/splash-screen.png"
         media="screen and (device-width: 320px) and (-webkit-device-pixel-ratio: 2)"
@@ -49,7 +51,6 @@ const _app: React.FC<AppProps> = ({ Component, pageProps, router }) => (
       />
     </Head>
     <Layout>
-      {/* @ts-expect-error */}
       <Component key={router.route} {...pageProps} />
     </Layout>
     <Analytics />

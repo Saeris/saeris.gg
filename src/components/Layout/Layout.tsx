@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { Waves } from "../Waves";
 import styles from "./Layout.module.css";
 
-export const Layout: React.FC<{ children: React.ReactNode }> = ({
+export const Layout: React.FC<{ readonly children: React.ReactNode }> = ({
   children
 }) => (
   <>

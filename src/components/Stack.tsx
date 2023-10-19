@@ -11,7 +11,7 @@ const variants = {
 export interface StackProps
   extends MotionProps,
     React.RefAttributes<HTMLSelectElement> {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }
 
 export const Stack: React.FC<StackProps> = ({ children, ...props }) => (
