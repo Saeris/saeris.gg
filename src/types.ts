@@ -13,7 +13,7 @@ export interface SiteConfig {
    * Empty links will not appear on your profile.
    * Links must be a URL.
    */
-  links: {
+  links: Array<{
     Icon: IconType;
     /** Where you want to direct visitors when clicking the link. */
     url: string;
@@ -22,5 +22,5 @@ export interface SiteConfig {
      * of the platform name which is used by default.
      */
     label: string;
-  }[];
+  }>;
 }
