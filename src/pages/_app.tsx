@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 // eslint-disable-next-line import/no-unresolved
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { config } from "../config";
 import { Layout } from "../components/Layout";
 import "../styles/reset.css";
@@ -54,6 +55,7 @@ const _app: React.FC<AppProps> = ({ Component, pageProps, router }) => (
       <Component key={router.route} {...pageProps} />
     </Layout>
     <Analytics />
+    <SpeedInsights />
   </>
 );
 
