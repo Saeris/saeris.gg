@@ -1,21 +1,24 @@
 import {
+  SiBluesky,
   SiLinkedin,
   SiGmail,
   SiInstagram,
-  SiTwitter,
   SiGithub,
   SiSteam,
   SiThreads
 } from "react-icons/si";
-import { MdPermContactCalendar, MdGamepad } from "react-icons/md";
+import { TfiTwitterAlt } from "react-icons/tfi";
+import { MdPermContactCalendar } from "react-icons/md";
 import type { SiteConfig } from "./types";
 
 export const config: SiteConfig = {
   name: `Drake Costa`,
   title: `Engineering • Design • Photography`,
   links: [
+    { Icon: MdPermContactCalendar, url: `//resume.saeris.gg`, label: `Resume` },
     { Icon: SiGithub, url: `//github.com/saeris`, label: `Github` },
-    { Icon: SiTwitter, url: `//twitter.com/saeris`, label: `Twitter` },
+    { Icon: SiBluesky, url: `//bsky.app/profile/saeris.gg`, label: `Bluesky` },
+    { Icon: TfiTwitterAlt, url: `//twitter.com/saeris`, label: `Twitter` },
     {
       Icon: SiThreads,
       url: `//www.threads.net/saeris.gg`,
@@ -32,8 +35,6 @@ export const config: SiteConfig = {
       url: `//www.linkedin.com/in/saeris`,
       label: `LinkedIn`
     },
-    { Icon: MdGamepad, url: `//worbik.saeris.io`, label: `Worbik` },
-    { Icon: MdPermContactCalendar, url: `//resume.saeris.gg`, label: `Resume` },
     { Icon: SiGmail, url: `mailto:yo@saer.is`, label: `Email` }
   ]
 };
