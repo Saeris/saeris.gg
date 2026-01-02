@@ -1,0 +1,16 @@
+---
+import Blank from "../layouts/Blank.astro";
+import { getEntry, render } from "astro:content";
+
+export const prerender = true;
+
+const entry = await getEntry("resume", "resume");
+
+if (typeof entry === `undefined`) throw new Error(`Unable to load page`);
+
+const { Content } = await render(entry);
+---
+
+<Blank title={entry?.data.title}>
+  <Content />
+</Blank>

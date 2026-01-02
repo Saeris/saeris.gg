@@ -1,0 +1,292 @@
+<canvas id="waves-canvas" transition:persist></canvas>
+
+<style is:global>
+  #waves-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+</style>
+
+<script>
+  import * as THREE from "three";
+  import {
+    Fn,
+    vec2,
+    vec4,
+    uniform,
+    modelWorldMatrix,
+    positionLocal,
+    mix,
+    smoothstep,
+    step,
+    mod,
+    mul,
+    sin,
+    add,
+    fract,
+    floor,
+    abs,
+    dot,
+    float,
+    varying
+  } from "three/tsl";
+  import { MeshBasicNodeMaterial, WebGPURenderer } from "three/webgpu";
+
+  const canvas = document.getElementById("waves-canvas") as HTMLCanvasElement;
+
+  // Perlin noise function in TSL
+  const glnRand4 = Fn<[ReturnType<typeof vec4>]>(([p]) => {
+    return mod(mul(add(mul(p, 34.0), 1.0), p), 289.0);
+  });
+
+  const fade = Fn<[ReturnType<typeof vec2>]>(([t]) => {
+    return mul(mul(mul(t, t), t), add(mul(t, add(mul(t, 6.0), -15.0)), 10.0));
+  });
+
+  const glnPerlin = Fn<[ReturnType<typeof vec2>]>(([P]) => {
+    const Pi = add(floor(vec4(P.x, P.y, P.x, P.y)), vec4(0.0, 0.0, 1.0, 1.0));
+    const Pf = add(fract(vec4(P.x, P.y, P.x, P.y)), vec4(0.0, 0.0, -1.0, -1.0));
+    const PiMod = mod(Pi, 289.0);
+
+    const ix = vec4(PiMod.x, PiMod.z, PiMod.x, PiMod.z);
+    const iy = vec4(PiMod.y, PiMod.y, PiMod.w, PiMod.w);
+    const fx = vec4(Pf.x, Pf.z, Pf.x, Pf.z);
+    const fy = vec4(Pf.y, Pf.y, Pf.w, Pf.w);
+
+    const i = glnRand4(add(glnRand4(ix), iy));
+    const gx = add(mul(fract(mul(i, 0.0243902439)), 2.0), -1.0);
+    const gy = add(abs(gx), -0.5);
+    const tx = add(floor(gx), 0.5);
+    const gxFinal = add(gx, tx.negate());
+
+    const g00 = vec2(gxFinal.x, gy.x);
+    const g10 = vec2(gxFinal.y, gy.y);
+    const g01 = vec2(gxFinal.z, gy.z);
+    const g11 = vec2(gxFinal.w, gy.w);
+
+    const norm = add(
+      1.79284291400159,
+      mul(
+        -0.85373472095314,
+        vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11))
+      )
+    );
+
+    const g00Norm = mul(g00, norm.x);
+    const g01Norm = mul(g01, norm.y);
+    const g10Norm = mul(g10, norm.z);
+    const g11Norm = mul(g11, norm.w);
+
+    const n00 = dot(g00Norm, vec2(fx.x, fy.x));
+    const n10 = dot(g10Norm, vec2(fx.y, fy.y));
+    const n01 = dot(g01Norm, vec2(fx.z, fy.z));
+    const n11 = dot(g11Norm, vec2(fx.w, fy.w));
+
+    const fadeXY = fade(vec2(Pf.x, Pf.y));
+    const nX = mix(vec2(n00, n01), vec2(n10, n11), fadeXY.x);
+    const nXY = mix(nX.x, nX.y, fadeXY.y);
+
+    return mul(nXY, 2.3);
+  });
+
+  // Random function for grain
+  const random = Fn<[ReturnType<typeof vec2>]>(([st]) => {
+    return fract(mul(43758.5453123, sin(dot(st, vec2(12.9898, 78.233)))));
+  });
+
+  // Uniforms
+  const timeUniform = uniform(0);
+  const color1Uniform = uniform(new THREE.Color("#9bff5c"));
+  const color2Uniform = uniform(new THREE.Color("#38fff0"));
+  const color3Uniform = uniform(new THREE.Color("#fc12ff"));
+  const backgroundColorUniform = uniform(new THREE.Color("#000"));
+  const colorSmoothingUniform = uniform(0.5);
+  const foldFrequencyUniform = uniform(0.05);
+  const foldHeightUniform = uniform(4.0);
+  const waveFrequencyUniform = uniform(1.2);
+  const waveAmplitudeUniform = uniform(0.83);
+  const waveDirectionUniform = uniform(new THREE.Vector2(-0.1, 1));
+  const grainIntensityUniform = uniform(0);
+  const grainSizeUniform = uniform(5);
+
+  const vModelPosition = varying(vec4());
+  const vElevation = varying(float());
+  const vScreenUV = varying(vec2());
+
+  // Position node
+  const positionNode = Fn(() => {
+    const modelPos = mul(modelWorldMatrix, vec4(positionLocal, 1.0));
+    vModelPosition.assign(modelPos);
+
+    // Calculate screen-space UV for grain
+    const projectedPos = mul(modelWorldMatrix, vec4(positionLocal, 1.0));
+    vScreenUV.assign(vec2(projectedPos.x, projectedPos.y));
+
+    const elevation = add(
+      mul(
+        glnPerlin(
+          add(
+            mul(vec2(modelPos.x, modelPos.z), waveFrequencyUniform),
+            mul(waveDirectionUniform, timeUniform)
+          )
+        ),
+        waveAmplitudeUniform
+      ),
+      0.5
+    );
+
+    vElevation.assign(elevation);
+
+    const foldElevation = mul(
+      mod(modelPos.z, foldFrequencyUniform),
+      foldHeightUniform
+    );
+
+    modelPos.y.addAssign(modelPos.z.negate());
+    modelPos.y.addAssign(foldElevation);
+    modelPos.y.addAssign(add(elevation, -0.5));
+
+    return modelPos;
+  });
+
+  // Color node
+  const colorNode = Fn(() => {
+    const modelPos = vec4(vModelPosition);
+    const elevation = float(vElevation);
+    const screenUV = vec2(vScreenUV);
+
+    const colorPerlin = add(
+      glnPerlin(
+        add(
+          mul(vec2(modelPos.x, modelPos.z), colorSmoothingUniform),
+          add(5.0, mul(timeUniform, 0.5))
+        )
+      ),
+      0.5
+    );
+
+    const blend1 = mul(
+      step(-0.5, colorPerlin.negate()),
+      mix(color1Uniform, color2Uniform, smoothstep(0.0, 0.5, colorPerlin))
+    );
+
+    const blend2 = mul(
+      step(0.5, colorPerlin),
+      mix(color2Uniform, color3Uniform, smoothstep(0.5, 1.0, colorPerlin))
+    );
+
+    const color = mix(
+      add(blend1, blend2),
+      backgroundColorUniform,
+      add(modelPos.z.negate(), 0.5)
+    );
+
+    const baseColor = vec4(
+      mix(backgroundColorUniform, color, add(elevation, 0.5)),
+      1.0
+    );
+
+    // Add grain effect
+    const grainCoord = mul(screenUV, grainSizeUniform);
+    const grainNoise = random(add(grainCoord, mul(timeUniform, 0.01)));
+    const grain = add(mul(grainNoise, 2.0), -1.0);
+    const grainedColor = add(baseColor.rgb, mul(grain, grainIntensityUniform));
+
+    return vec4(grainedColor, 1.0);
+  });
+
+  // Setup scene
+  const scene = new THREE.Scene();
+
+  // Setup orthographic camera
+  const camera = new THREE.OrthographicCamera(
+    -window.innerWidth / 2, // left
+    window.innerWidth / 2, // right
+    window.innerHeight / 2, // top
+    -window.innerHeight / 2, // bottom
+    0.1, // near
+    1000 // far
+  );
+  camera.position.set(0.3, 4.8, 1.43);
+  camera.rotation.set(
+    -1.2812519415356568,
+    0.05982689778574888,
+    0.19806541601860809,
+    "XYZ"
+  );
+  camera.zoom = 1200;
+  camera.updateProjectionMatrix();
+
+  // Setup renderer
+  const renderer = new WebGPURenderer({
+    canvas,
+    antialias: true,
+    alpha: true
+  });
+  renderer.setClearColor(new THREE.Color("#000"));
+  renderer.setClearAlpha(1);
+  const initialScrollbarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  renderer.setSize(
+    window.innerWidth - initialScrollbarWidth,
+    window.innerHeight
+  );
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Create material with TSL
+  const material = new MeshBasicNodeMaterial({
+    side: THREE.DoubleSide
+  });
+
+  material.positionNode = positionNode();
+  material.colorNode = colorNode();
+
+  // Create mesh
+  const geometry = new THREE.PlaneGeometry(10, 10, 1000, 1000);
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = -1.75 / 3;
+  scene.add(mesh);
+
+  // Animation loop
+  async function animate() {
+    requestAnimationFrame(animate);
+    timeUniform.value += 0.001 * 2.16;
+    renderer.render(scene, camera);
+  }
+
+  // Handle resize
+  function onWindowResize() {
+    camera.left = -window.innerWidth / 2;
+    camera.right = window.innerWidth / 2;
+    camera.top = window.innerHeight / 2;
+    camera.bottom = -window.innerHeight / 2;
+    camera.updateProjectionMatrix();
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    renderer.setSize(window.innerWidth - scrollbarWidth, window.innerHeight);
+  }
+
+  window.addEventListener("resize", onWindowResize);
+
+  // Initialize and start animation
+  renderer
+    .init()
+    .then(() => {
+      animate();
+    })
+    .catch((error) => {
+      console.error("WebGPU initialization failed:", error);
+    });
+
+  // Cleanup on page unload
+  window.addEventListener("beforeunload", () => {
+    geometry.dispose();
+    material.dispose();
+    renderer.dispose();
+  });
+</script>

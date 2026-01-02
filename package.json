@@ -1,58 +1,112 @@
 {
   "name": "saeris.gg",
-  "version": "2023.05.15",
-  "main": "src/pages/index.tsx",
+  "version": "2025.12.16",
+  "main": "src/pages/index.astro",
   "repository": "git@github.com:Saeris/saeris.gg.git",
   "author": "Drake Costa <drake@saeris.io> (https://saeris.gg)",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "ci": "yarn test --silent",
-    "lint": "yarn test:lint",
-    "format": "yarn test:lint --fix",
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
-    "test": "run-s test:*",
-    "test:lint": "eslint \"./src/**/*.{j,t}s?(x)\"",
-    "test:unit": "jest -c ./jest.config.js",
-    "test:typecheck": "tsc --noEmit",
-    "typecheck": "yarn test:typecheck"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@react-three/drei": "^9.90.0",
-    "@react-three/fiber": "^8.15.12",
-    "@vercel/analytics": "^1.1.1",
-    "@vercel/og": "^0.5.20",
-    "@vercel/speed-insights": "^1.0.0",
-    "framer-motion": "^10.16.15",
-    "next": "^14.0.4",
-    "next-pwa": "^5.6.0",
-    "postcss": "^8.4.32",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-nested": "^6.0.1",
-    "postcss-preset-env": "^9.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.12.0",
-    "three": "^0.159.0"
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/vercel": "^9.0.2",
+    "@fontsource-variable/mona-sans": "^5.2.8",
+    "@fontsource-variable/noto-sans": "^5.2.10",
+    "@saeris/colors": "^0.1.2",
+    "@vercel/analytics": "^1.6.1",
+    "@vercel/og": "^0.8.6",
+    "@vercel/speed-insights": "^1.3.1",
+    "@vite-pwa/astro": "^1.2.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "three": "^0.182.0"
   },
   "devDependencies": {
-    "@saeris/eslint-config": "^2.5.0",
-    "@types/eslint": "^8.44.8",
-    "@types/jest": "^29.5.11",
-    "@types/node": "20.10.4",
-    "@types/react": "18.2.42",
-    "@types/react-dom": "18.2.17",
-    "@types/three": "^0.159.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
-    "eslint": "^8.55.0",
-    "eslint-plugin-import": "^2.29.0",
-    "jest": "^29.7.0",
-    "prettier": "^3.1.0",
-    "typescript": "5.3.3",
-    "typescript-plugin-css-modules": "^5.0.2"
+    "@astrojs/ts-plugin": "^1.10.6",
+    "@saeris/eslint-config": "^3.2.4",
+    "@saeris/rehype-inline-svg": "^0.0.4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "25.0.3",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "^0.182.0",
+    "@vitejs/plugin-react": "^5.1.2",
+    "astro": "^5.16.6",
+    "eslint": "^9.39.2",
+    "jsdom": "^27.3.0",
+    "postcss": "^8.5.6",
+    "postcss-load-config": "^6.0.1",
+    "postcss-nested": "^7.0.2",
+    "postcss-preset-env": "^10.5.0",
+    "prettier": "^3.7.4",
+    "prettier-plugin-astro": "^0.14.1",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "rehype-unwrap-images": "^1.0.0",
+    "remark": "^15.0.1",
+    "remark-alerts": "^0.0.1",
+    "remark-attributes": "^0.3.2",
+    "remark-captions": "^2.2.4",
+    "remark-definition-list": "^2.0.0",
+    "remark-directive": "^4.0.0",
+    "remark-extended-table": "^2.0.3",
+    "remark-flexible-markers": "^1.3.2",
+    "remark-inline-svg": "^1.1.1",
+    "remark-sectionize": "^2.1.0",
+    "remark-squeeze-paragraphs": "^6.0.0",
+    "sharp": "^0.34.5",
+    "typescript": "5.9.3",
+    "typescript-plugin-css-modules": "^5.2.0",
+    "vitest": "^4.0.16"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.9.2",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-astro"
+    ],
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-nested": {},
+      "postcss-preset-env": {
+        "autoprefixer": {
+          "flexbox": "no-2009"
+        },
+        "stage": 3,
+        "features": {
+          "custom-properties": false
+        }
+      }
+    }
+  }
 }
